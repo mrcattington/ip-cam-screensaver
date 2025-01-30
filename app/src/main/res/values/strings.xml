@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">IP Cam Screensaver</string>
+    <string name="dream_service_name">Camera Screensaver</string>
+    <string name="settings_title">Camera Screensaver Settings</string>
+    <string name="rtsp_url_label">RTSP URL</string>
+    <string name="rtsp_url_hint">Enter RTSP stream URL</string>
+    <string name="save_button">Save</string>
 </resources>
