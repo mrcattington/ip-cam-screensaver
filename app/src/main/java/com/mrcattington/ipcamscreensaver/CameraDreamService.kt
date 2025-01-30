@@ -123,7 +123,7 @@ class CameraDreamService : DreamService() {
                     playerView?.player = this
                     repeatMode = Player.REPEAT_MODE_ALL
                     playWhenReady = true
-                    // Start unmuted
+                    // Start un-muted
                     volume = 0f
                     Log.d(tag, "Initial player volume set to: $volume")
 
