@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,10 +10,12 @@
         android:id="@+id/rtspUrlEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:hint="@string/rtsp_url_hint"
-        android:inputType="textUri"
         android:importantForAutofill="no"
-        android:layout_marginBottom="16dp"/>
+        android:inputType="textUri"
+        android:minHeight="48dp"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <Button
         android:id="@+id/saveButton"
