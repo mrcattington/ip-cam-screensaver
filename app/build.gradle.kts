@@ -53,6 +53,8 @@ dependencies {
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.exoplayer.rtsp)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

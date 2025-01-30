@@ -20,33 +20,31 @@
             android:theme="@style/Theme.IPCamScreensaver">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".DreamSettingsActivity"
+            android:label="@string/settings_title"
             android:exported="true"
-            android:label="@string/settings_title">
+            android:theme="@style/Theme.AppCompat">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.service.dreams.DreamService$DreamActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.service.dreams.DreamService" />
             </intent-filter>
         </activity>
         <service
             android:name=".CameraDreamService"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
-            android:permission="android.permission.BIND_DREAM_SERVICE"
-            android:label="@string/dream_service_name">
+            android:label="@string/dream_service_name"
+            android:permission="android.permission.BIND_DREAM_SERVICE">
             <intent-filter>
                 <action android:name="android.service.dreams.DreamService" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <meta-data
-                android:name="android.service.dream.DreamService.SETTINGS_ACTIVITY"
-                android:value="com.mrcattington.ipcamscreensaver.DreamSettingsActivity" />
+                android:name="android.service.dream"
+                android:resource="@xml/dream_settings" />
         </service>
     </application>
 
