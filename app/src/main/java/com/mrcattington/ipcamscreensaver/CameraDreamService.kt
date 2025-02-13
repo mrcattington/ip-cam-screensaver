@@ -24,6 +24,8 @@ class CameraDreamService : DreamService() {
     private var muteButton: ImageButton? = null
     private var isMuted = true
     private val tag = "CameraDreamService"
+    private var healthCheckRunnable: Runnable? = null
+    private var streamRefreshRunnable: Runnable? = null
 
     private fun getStreamUrl(): String {
         return PreferenceManager.getDefaultSharedPreferences(this)
@@ -130,6 +132,13 @@ class CameraDreamService : DreamService() {
                     addListener(object : Player.Listener {
                         override fun onPlayerError(error: PlaybackException) {
                             Log.e(tag, "Player error: ${error.message}", error)
+                            // Wait briefly then attempt to reconnect
+                            playerView?.postDelayed({
+                                player?.let { exoPlayer ->
+                                    exoPlayer.prepare()
+                                    exoPlayer.play()
+                                }
+                            }, 5000) // 5 second delay before retry
                         }
 
                         override fun onPlaybackStateChanged(playbackState: Int) {
@@ -166,6 +175,39 @@ class CameraDreamService : DreamService() {
                         Log.e(tag, "No RTSP URL configured")
                     }
                 }
+
+            healthCheckRunnable = Runnable {
+                player?.let { exoPlayer ->
+                    if (exoPlayer.playbackState == Player.STATE_READY &&
+                        exoPlayer.playWhenReady &&
+                        !exoPlayer.isPlaying) {
+                        // Stream appears frozen, restart it
+                        exoPlayer.prepare()
+                        exoPlayer.play()
+                    }
+                }
+                healthCheckRunnable?.let {
+                    playerView?.postDelayed(it, 30000) // Check every 30 seconds
+                }
+            }.also { runnable ->
+                playerView?.postDelayed(runnable, 30000)
+            }
+
+            streamRefreshRunnable = Runnable {
+                player?.let { exoPlayer ->
+                    // Reload the stream periodically
+                    val currentPosition = exoPlayer.currentPosition
+                    exoPlayer.prepare()
+                    exoPlayer.seekTo(currentPosition)
+                    exoPlayer.play()
+                }
+                streamRefreshRunnable?.let {
+                    playerView?.postDelayed(it, 4 * 60 * 60 * 1000) // Refresh every 4 hours
+                }
+            }.also { runnable ->
+                playerView?.postDelayed(runnable, 4 * 60 * 60 * 1000)
+            }
+
         } catch (e: Exception) {
             Log.e(tag, "Error in onAttachedToWindow", e)
         }
@@ -193,6 +235,16 @@ class CameraDreamService : DreamService() {
 
     private fun releasePlayer() {
         try {
+            healthCheckRunnable?.let { runnable ->
+                playerView?.removeCallbacks(runnable)
+            }
+            healthCheckRunnable = null
+
+            streamRefreshRunnable?.let { runnable ->
+                playerView?.removeCallbacks(runnable)
+            }
+            streamRefreshRunnable = null
+
             player?.let { exoPlayer ->
                 exoPlayer.release()
                 player = null
