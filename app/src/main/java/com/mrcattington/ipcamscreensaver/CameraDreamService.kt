@@ -43,7 +43,7 @@ class CameraDreamService : DreamService() {
             // Create the player view with proper aspect ratio handling
             playerView = PlayerView(this).apply {
                 useController = false
-                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
             }
             Log.d(tag, "PlayerView created")
 
@@ -52,6 +52,7 @@ class CameraDreamService : DreamService() {
                 setImageResource(R.drawable.ic_volume_off)
                 background = null
                 alpha = 0.7f
+                setPadding(40, 40, 40, 40)
             }
 
             // Create a frame layout to hold both the player view and mute button
